@@ -4,6 +4,15 @@ Glimpse Service Asset
 This service manage the asset upload and download
 
 
+Install
+-------
+Install virtualenv and python dependencies
+```
+virtualenv -p python3 venv
+. venv/bin/activate
+```
+
+
 Deploy
 ------
 Build docker image and push to Google container registry
