@@ -1,6 +1,82 @@
+import os
+import uuid
+
+from cassandra.cqlengine import connection
+from flask import request, make_response
 from flask_restful import Resource
+from google.cloud import storage
+from google.cloud.storage import Blob
+from google.oauth2 import service_account
+
+from conf.config import ASSETS_BUCKET, IMAGE_EXPIRATION_TIME, GOOGLE_CREDENTIALS, CASSANDRA_HOSTS, USER_KEYSPACE
+from model.asset import AssetByAssetName, AssetByUserId
 
 
 class Image(Resource):
     def post(self):
-        return {"status": True}
+        image_file = request.files.get('image')
+        if not image_file:
+            return make_response("Missing image file", 500)
+
+        user_id = request.form.get('user_id')
+        if not user_id:
+            return make_response("Missing user id", 500)
+
+        # save image
+        filename_first, file_extension = os.path.splitext(image_file.filename)
+        filename = filename_first + "." + str(uuid.uuid4()) + file_extension
+
+        self._upload_asset(filename, image_file)
+        self._save_to_db(filename, user_id)
+
+        return {
+            "image_name": filename,
+            "image_url": self._get_image_signed_url(filename)
+        }
+
+    @staticmethod
+    def _upload_asset(filename, image_file):
+        # storage
+        if GOOGLE_CREDENTIALS:
+            google_credentials = service_account.Credentials.from_service_account_file(GOOGLE_CREDENTIALS)
+        else:
+            google_credentials = None
+        client = storage.Client(credentials=google_credentials)
+        bucket = client.get_bucket(ASSETS_BUCKET)
+        blob = Blob(filename, bucket)
+        blob.upload_from_file(image_file)
+
+    @staticmethod
+    def _get_image_signed_url(image_file):
+
+        if GOOGLE_CREDENTIALS:
+            google_credentials = service_account.Credentials.from_service_account_file(GOOGLE_CREDENTIALS)
+        else:
+            google_credentials = None
+
+        client = storage.Client(credentials=google_credentials)
+        bucket = client.get_bucket(ASSETS_BUCKET)
+        blob = Blob(image_file, bucket)
+        signed_url = blob.generate_signed_url(IMAGE_EXPIRATION_TIME)
+        return signed_url
+
+    @staticmethod
+    def _save_to_db(filename, user_id):
+        connection.setup(hosts=CASSANDRA_HOSTS, default_keyspace=USER_KEYSPACE)
+        AssetByAssetName.create(
+            asset_name=filename,
+            user_id=user_id
+        )
+
+        AssetByUserId.create(
+            asset_name=filename,
+            user_id=user_id
+        )
+
+
+class ImageName(Image):
+    def get(self, image_name):
+        return {
+            "image_name": image_name,
+            "image_url": self._get_image_signed_url(image_name)
+        }

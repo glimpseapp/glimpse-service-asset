@@ -68,6 +68,32 @@
           }
         }
       }
+    },
+    "/image/{image_name}":{
+      "get": {
+        "description": "Get an image URL",
+        "operationId": "GetImage",
+        "parameters": [
+          {
+            "name": "image_name",
+            "in": "path",
+            "description": "name of the image",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the image URL",
+            "schema": {
+              "$ref": "#/definitions/UploadImageResponse"
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
