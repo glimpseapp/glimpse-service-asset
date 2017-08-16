@@ -12,7 +12,7 @@ api = Api(app)
 api.add_resource(Healthz, '/healthz')
 api.add_resource(Image, '/image')
 api.add_resource(GetImageUrl, '/image/<image_name>')
-api.add_resource(GetImageUrlBulk, '/images')
+api.add_resource(GetImageUrlBulk, '/images-url-bulk')
 
 if __name__ == '__main__':
     app.run(host=HTTP_HOST, port=HTTP_PORT)

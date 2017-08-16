@@ -69,6 +69,26 @@
         }
       }
     },
+    "/images-url-bulk": {
+      "post": {
+        "description": "Get the URL of images in bulk",
+        "operationId": "ImagesUrlBulk",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the URLs of the images in intput",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          }
+        }
+      }
+    },
     "/image/{image_name}":{
       "get": {
         "description": "Get an image URL",
