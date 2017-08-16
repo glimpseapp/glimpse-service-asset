@@ -1,0 +1,117 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Manage the asset",
+    "title": "Glimpse Service asset",
+    "version": "1.0.0"
+  },
+  "host": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
+  "x-google-endpoints": [
+    {
+      "name": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
+      "target": "35.185.97.243"
+    }
+  ],
+  "basePath": "/",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "schemes": [
+    "https"
+  ],
+  "paths": {
+    "/healthz": {
+      "get": {
+        "description": "Check the health of the service",
+        "operationId": "healthz",
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Service is healthy",
+            "schema": {
+              "$ref": "#/definitions/SuccessResponse"
+            }
+          }
+        }
+      }
+    },
+    "/image": {
+      "post": {
+        "description": "Upload an image",
+        "operationId": "UploadImage",
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "parameters": [
+          {
+            "name": "media",
+            "in": "formData",
+            "description": "uploaded asset",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the image URL",
+            "schema": {
+              "$ref": "#/definitions/UploadImageResponse"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "SuccessResponse": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "type": "boolean"
+        }
+      }
+    },
+    "UploadImageBody": {
+      "type": "object",
+      "required": [
+        "user_id"
+      ],
+      "properties": {
+        "user_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "8713394d-f798-4951-aa01-ba1bc4bec237"
+        }
+      }
+    },
+    "UploadImageResponse": {
+      "type": "object",
+      "properties": {
+        "image_id": {
+          "type": "string",
+          "format": "uuid",
+          "example": "8713394d-f798-4951-aa01-ba1bc4bec237.jpg"
+        },
+        "image_url": {
+          "type": "string",
+          "example": "https://link-to-google-storage/image.jpg"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "api_key": {
+      "type": "apiKey",
+      "name": "key",
+      "in": "query"
+    }
+  }
+}

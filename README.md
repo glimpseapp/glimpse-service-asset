@@ -45,6 +45,20 @@ kubectl apply -f kube-deployment.yaml
 kubectl apply -f kube-service.yaml
 ```
 
+Get the service IP for the asset service and update the openapi:
+```
+kc get service
+```
+
+Update the following openapi field:
+```
+  "x-google-endpoints": [
+    {
+      "name": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
+      "target": [SERVICE EXTERNAL IP]
+    }
+  ],
+```
 
 Run locally
 -----------

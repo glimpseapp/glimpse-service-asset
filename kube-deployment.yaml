@@ -1,0 +1,29 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: glimpse-service-asset
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: glimpse-service-asset
+    spec:
+      containers:
+      - name: esp
+        image: gcr.io/endpoints-release/endpoints-runtime:1
+        args: [
+          "-p", "8081",
+          "-a", "127.0.0.1:5000",
+          "-s", "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
+          "-v", "2017-08-16r4",
+        ]
+        ports:
+          - containerPort: 8081
+      - name: asset
+        image: gcr.io/glimpse-123456/glimpse-service-asset:latest
+        ports:
+          - containerPort: 5000
+        env:
+        - name: CASSANDRA_HOSTS
+          value: cassandra
