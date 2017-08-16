@@ -86,18 +86,17 @@ class GetImageUrlBulk(Image):
 
     # todo: need to refactor the get_url
     def post(self):
-
         data = request.get_json(silent=True)
 
         images = data.get("images")
         if not len(images):
             return make_response("You must send the list of images")
 
-        image_list = []
+        image_list = {}
         for image_name in images:
-            image_list.append({
-                "image_name": image_name,
+            image_list[image_name] = {
                 "image_url": self._get_image_signed_url(image_name)
-            })
-
-        return image_list
+            }
+        return {
+            "images": image_list
+        }
