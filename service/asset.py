@@ -77,26 +77,25 @@ class Image(Resource):
 class GetImageUrl(Image):
     def get(self, image_name):
         return {
-            "image_name": image_name,
-            "image_url": self._get_image_signed_url(image_name)
+            "images": {
+                image_name: self._get_image_signed_url(image_name)
+            }
         }
 
 
 class GetImageUrlBulk(Image):
-
-    # todo: need to refactor the get_url
     def post(self):
         data = request.get_json(silent=True)
 
-        images = data.get("images")
-        if not len(images):
+        image_names = data.get("images")
+        if not len(image_names):
             return make_response("You must send the list of images")
 
-        image_list = {}
-        for image_name in images:
-            image_list[image_name] = {
+        images = {}
+        for image_name in image_names:
+            images[image_name] = {
                 "image_url": self._get_image_signed_url(image_name)
             }
         return {
-            "images": image_list
+            "images": images
         }
