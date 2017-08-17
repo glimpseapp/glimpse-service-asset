@@ -5,13 +5,7 @@
     "title": "Glimpse Service asset",
     "version": "1.0.0"
   },
-  "host": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
-  "x-google-endpoints": [
-    {
-      "name": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
-      "target": "35.185.97.243"
-    }
-  ],
+  "host": "asset.glimpse.online",
   "basePath": "/",
   "consumes": [
     "application/json"
