@@ -20,7 +20,6 @@ Build docker image and push to Google container registry
 docker build -t gcr.io/glimpse-123456/glimpse-service-asset .
 gcloud docker -- push gcr.io/glimpse-123456/glimpse-service-asset
 ```
-*Note: the the*
 
 
 *Update openapi.yaml and deploy*
@@ -34,7 +33,7 @@ Add the CONFIG_ID to the kube-deployment.yaml into the -v argument:
         args: [
           "-p", "8081",
           "-a", "127.0.0.1:5000",
-          "-s", "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
+          "-s", "asset.glimpse.online",
           "-v", "[CONFIG_ID]",
         ]
 ``` 
