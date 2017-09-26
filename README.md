@@ -120,4 +120,4 @@ And the volumes for the pod:
 ```
 
 
-Check this tutorial in case of doubt: shttps://jhipster.github.io/tips/018_tip_kubernetes_and_google_cloud_sql.html 
+Check this tutorial in case of doubt: https://jhipster.github.io/tips/018_tip_kubernetes_and_google_cloud_sql.html 

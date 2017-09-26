@@ -10,6 +10,7 @@ from google.oauth2 import service_account
 
 from conf.config import ASSETS_BUCKET, IMAGE_EXPIRATION_TIME, GOOGLE_CREDENTIALS, CASSANDRA_HOSTS, USER_KEYSPACE
 from model.asset import AssetByAssetName, AssetByUserId
+from service.common import get_user_id_from_jwt
 
 
 class Image(Resource):
@@ -18,7 +19,7 @@ class Image(Resource):
         if not image_file:
             return make_response("Missing image file", 500)
 
-        user_id = request.form.get('user_id')
+        user_id = get_user_id_from_jwt()
         if not user_id:
             return make_response("Missing user id", 500)
 

@@ -31,13 +31,13 @@ paths:
       consumes:
       - multipart/form-data
       parameters:
-      - name: media
+      - name: image
         in: formData
         description: uploaded asset
         required: true
         type: string
       - name: user_id
-        in: formData
+        in: header
         description: UserId of the user
         required: true
         type: string
