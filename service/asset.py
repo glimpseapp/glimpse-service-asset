@@ -15,13 +15,13 @@ from service.common import get_user_id_from_jwt
 
 class Image(Resource):
     def post(self):
-        image_file = request.files.get('image')
-        if not image_file:
-            return make_response("Missing image file", 500)
-
         user_id = get_user_id_from_jwt()
         if not user_id:
             return make_response("Missing user id", 500)
+
+        image_file = request.files.get('image')
+        if not image_file:
+            return make_response("Missing image file", 500)
 
         # save image
         filename_first, file_extension = os.path.splitext(image_file.filename)
