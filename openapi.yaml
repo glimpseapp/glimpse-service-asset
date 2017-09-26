@@ -119,15 +119,14 @@ definitions:
     type: string
     description: Image Url
 
-securityDefinitions:
-  api_key:
-    type: apiKey
-    name: key
-    in: query
+security:
+  - firebase: []
 
+securityDefinitions:
   firebase:
     authorizationUrl: ""
     flow: implicit
     type: oauth2
     x-google-issuer: "https://securetoken.google.com/glimpse-123456"
     x-google-jwks_uri: "https://www.googleapis.com/service_accounts/v1/metadata/x509/securetoken@system.gserviceaccount.com"
+    x-google-audiences: "glimpse-123456"

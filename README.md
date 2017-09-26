@@ -18,7 +18,7 @@ Deploy
 Build docker image and push to Google container registry
 ```
 docker build -t gcr.io/glimpse-123456/glimpse-service-asset .
-gcloud docker -- push gcr.io/glimpse-123456/glimpse-service-asset
+`**gcloud docker -- push gcr.io/glimpse-123456/glimpse-service-asset**`
 ```
 
 
