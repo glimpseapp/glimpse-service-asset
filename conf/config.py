@@ -1,7 +1,5 @@
 import os
 
-from time import time
-
 HTTP_PORT = os.getenv("HTTP_PORT", 5000)
 HTTP_HOST = os.getenv("HTTP_HOST", "0.0.0.0")
 
@@ -13,6 +11,6 @@ if isinstance(CASSANDRA_HOSTS, str):
 USER_KEYSPACE = "asset"
 
 ASSETS_BUCKET = os.getenv("ASSETS_BUCKET", "glimpse-asset")
-IMAGE_EXPIRATION_TIME = int(time() + os.getenv("IMAGE_EXPIRATION_TIME", 3600))
+IMAGE_EXPIRATION_SECONDS = int(os.getenv("IMAGE_EXPIRATION_SECONDS", 86400))
 
 GOOGLE_CREDENTIALS = os.getenv("GOOGLE_CREDENTIALS", None)

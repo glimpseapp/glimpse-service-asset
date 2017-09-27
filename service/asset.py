@@ -1,5 +1,6 @@
 import os
 import uuid
+from time import time
 
 from cassandra.cqlengine import connection
 from flask import request, make_response
@@ -8,7 +9,7 @@ from google.cloud import storage
 from google.cloud.storage import Blob
 from google.oauth2 import service_account
 
-from conf.config import ASSETS_BUCKET, IMAGE_EXPIRATION_TIME, GOOGLE_CREDENTIALS, CASSANDRA_HOSTS, USER_KEYSPACE
+from conf.config import ASSETS_BUCKET, IMAGE_EXPIRATION_SECONDS, GOOGLE_CREDENTIALS, CASSANDRA_HOSTS, USER_KEYSPACE
 from model.asset import AssetByAssetName, AssetByUserId
 from service.common import get_user_id_from_jwt
 
@@ -58,7 +59,7 @@ class Image(Resource):
         client = storage.Client(credentials=google_credentials)
         bucket = client.get_bucket(ASSETS_BUCKET)
         blob = Blob(image_file, bucket)
-        signed_url = blob.generate_signed_url(IMAGE_EXPIRATION_TIME)
+        signed_url = blob.generate_signed_url(int(time() + IMAGE_EXPIRATION_SECONDS))
         return signed_url
 
     @staticmethod

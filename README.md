@@ -15,19 +15,25 @@ virtualenv -p python3 venv
 
 Deploy
 ------
-Build docker image and push to Google container registry
-```
+
+*Code changes*
+When you change something in the code, you want to build the docker image and push to Google container registry,
+then you want to deploy the kube-deployment to refresh the pod:  
+```bash
 docker build -t gcr.io/glimpse-123456/glimpse-service-asset .
-`**gcloud docker -- push gcr.io/glimpse-123456/glimpse-service-asset**`
+gcloud docker -- push gcr.io/glimpse-123456/glimpse-service-asset
+kubectl delete deployment glimpse-service-asset
+kubectl apply -f kube-deployment.yaml
 ```
 
-
-*Update openapi.yaml and deploy*
-```gcloud service-management deploy openapi.json```
-
-After you run the command above get the CONFIG_ID of the service you just deployed, it looks something like 2017-08-10r6. 
-Add the CONFIG_ID to the kube-deployment.yaml into the -v argument:
+*Changes to the API*
+To change the API you want to deploy the openapi.json file:
+```bash
+gcloud service-management deploy openapi.json
 ```
+
+Then, you want to update the configuration in the kube-deployment:
+```yaml
       - name: esp
         image: gcr.io/endpoints-release/endpoints-runtime:1
         args: [
@@ -38,26 +44,24 @@ Add the CONFIG_ID to the kube-deployment.yaml into the -v argument:
         ]
 ``` 
 
-*Update kubernetes file and deploy*
-```
+Finally you want to deploy the kubernetes deployment:
+```bash
+kubectl delete deployment glimpse-service-asset
 kubectl apply -f kube-deployment.yaml
+```
+
+Deploy the service
+------------------
+To deploy the service and connect it to the Internet: 
+```bash
 kubectl apply -f kube-service.yaml
 ```
 
-Get the service IP for the asset service and update the openapi:
+Get the IP of the service and update the CNAME in the DNS entry: 
 ```
 kc get service
 ```
 
-Update the following openapi field:
-```
-  "x-google-endpoints": [
-    {
-      "name": "glimpse-service-asset.endpoints.glimpse-123456.cloud.goog",
-      "target": [SERVICE EXTERNAL IP]
-    }
-  ],
-```
 
 Run locally
 -----------
